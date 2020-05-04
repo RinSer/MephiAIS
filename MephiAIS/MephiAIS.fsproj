@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Entities\BaseType.fs" />
+    <Compile Include="Entities\User.fs" />
+    <Compile Include="Entities\ProjectItem.fs" />
+    <Compile Include="Entities\Project.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+</Project>
