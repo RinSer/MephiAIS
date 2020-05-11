@@ -7,9 +7,10 @@
 
   <ItemGroup>
     <Compile Include="Entities\BaseType.fs" />
-    <Compile Include="Entities\User.fs" />
     <Compile Include="Entities\ProjectItem.fs" />
+    <Compile Include="Entities\User.fs" />
     <Compile Include="Entities\Project.fs" />
+    <Compile Include="Entities\App.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
