@@ -108,6 +108,20 @@ module RPSAdminTests =
                     Assert.Contains(projectItemToAdd, user.ProjectItems)
 
         [<Fact>]
+        let ``Should add with a project item a new user if he does not belong to project`` () =
+            for project in App.Projects do
+                let numProjectItems = Array.sumBy (fun(project: Project) -> project.ProjectItems.Length) App.Projects
+                let projectItemToAdd = new ProjectItem(numProjectItems + 1, Globes.Faker.Lorem.Sentence(), Globes.Faker.Lorem.Paragraph(0),
+                                                        DateTime.Now, DateTime.Now, Globes.Status, Globes.Task)
+                let userData = Globes.Faker.Person
+                let numUsers = Array.sumBy (fun(project: Project) -> project.Users.Length) App.Projects
+                let userToAdd = new User(numUsers + 1, userData.UserName, userData.Phone, 
+                                        userData.LastName, userData.FirstName, userData.FirstName, Globes.UserRole)
+                project.addProjectItem(projectItemToAdd, [| userToAdd |])
+                Assert.Contains(projectItemToAdd, project.ProjectItems)
+                Assert.Contains(userToAdd, project.Users)
+
+        [<Fact>]
         let ``Should update a project item`` () =
             for project in App.Projects do
                 let oldProjectItem = project.ProjectItems.[0]
@@ -121,6 +135,28 @@ module RPSAdminTests =
                 for user in updatedUsers do
                     Assert.Contains(projectItemToUpdate, user.ProjectItems)
                     Assert.DoesNotContain(oldProjectItem, user.ProjectItems)
+                for user in oldUsers do
+                    Assert.DoesNotContain(projectItemToUpdate, user.ProjectItems)
+                    Assert.DoesNotContain(oldProjectItem, user.ProjectItems)
+
+        [<Fact>]
+        let ``Should update a project item with adding a user to project`` () =
+            for project in App.Projects do
+                let oldProjectItem = project.ProjectItems.[0]
+                let projectItemToUpdate = new ProjectItem(oldProjectItem.Id, Globes.Faker.Lorem.Sentence(), Globes.Faker.Lorem.Paragraph(0),
+                                                    DateTime.Now, DateTime.Now, Globes.Status, Globes.Task)
+                let oldUsers = Array.filter (fun(user: User) -> Array.contains oldProjectItem user.ProjectItems) project.Users
+                let userData = Globes.Faker.Person
+                let numUsers = Array.sumBy (fun(project: Project) -> project.Users.Length) App.Projects
+                let usersToAdd = [| new User(numUsers + 1, userData.UserName, userData.Phone, 
+                                        userData.LastName, userData.FirstName, userData.FirstName, Globes.UserRole) |]
+                project.updateProjectItem(projectItemToUpdate, usersToAdd)
+                Assert.Contains(projectItemToUpdate, project.ProjectItems)
+                Assert.DoesNotContain(oldProjectItem, project.ProjectItems)
+                for user in usersToAdd do
+                    Assert.Contains(projectItemToUpdate, user.ProjectItems)
+                    Assert.DoesNotContain(oldProjectItem, user.ProjectItems)
+                    Assert.Contains(user, project.Users)
                 for user in oldUsers do
                     Assert.DoesNotContain(projectItemToUpdate, user.ProjectItems)
                     Assert.DoesNotContain(oldProjectItem, user.ProjectItems)

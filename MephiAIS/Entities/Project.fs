@@ -26,6 +26,8 @@
 
         member this.addProjectItem(item: ProjectItem, users: User array) = 
             for user in users do
+                if not <| Array.contains user this.Users then
+                    this.addUser(user)
                 user.ProjectItems <- Array.append user.ProjectItems [| item |]
             _projectItems <- Array.append _projectItems [| item |]
 
@@ -34,6 +36,8 @@
             for user in this.Users do
                 user.ProjectItems <- Array.filter (fun pi -> pi.Id <> item.Id) user.ProjectItems
             for user in users do
+                if not <| Array.contains user this.Users then
+                    this.addUser(user)
                 user.ProjectItems <- Array.append user.ProjectItems [| item |]
             _projectItems.[idx] <- item
 
