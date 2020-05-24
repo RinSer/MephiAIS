@@ -49,7 +49,7 @@ module RPSAdminTests =
             Assert.Contains(projectToAdd, App.Projects)
 
         [<Fact>]
-        let ``Should upodate a project`` () =
+        let ``Should update a project`` () =
             let oldProject = App.Projects.[0];
             let projectToUpdate = new Project(oldProject.Id, Globes.Faker.Company.CompanyName(), Globes.Faker.Company.CatchPhrase())
             App.updateProject projectToUpdate
@@ -168,6 +168,6 @@ module RPSAdminTests =
             let issues = App.getProjectItemsByCategory Globes.Issue
             Assert.All(issues, fun item -> Assert.True(item.Category = Globes.Issue))
             let numProjectItems = Array.sumBy (fun(project: Project) -> project.ProjectItems.Length) App.Projects
-            Assert.StrictEqual(numProjectItems, tasks.Length + issues.Length);
+            Assert.StrictEqual(numProjectItems, tasks.Length + issues.Length)
 
         interface IClassFixture<Fixtures.RPSAdminFixture>

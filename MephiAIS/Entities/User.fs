@@ -16,5 +16,3 @@
         member this.ProjectItems 
             with get() = _projectItems
             and set(items: ProjectItem array) = _projectItems <- items
-
-        override this.ToString() = sprintf "Login: %s, Name: %s" this.Login this.Name

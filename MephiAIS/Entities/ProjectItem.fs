@@ -13,5 +13,3 @@
         member this.EndTime with get() = endTime
         member this.Status with get() = status
         member this.Category with get() = category
-
-        override this.ToString() = sprintf "Title: %s, Category: %s" this.Title this.Category

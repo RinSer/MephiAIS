@@ -40,5 +40,3 @@
                     this.addUser(user)
                 user.ProjectItems <- Array.append user.ProjectItems [| item |]
             _projectItems.[idx] <- item
-
-        override this.ToString() = sprintf "Title: %s, Description: %s" this.Title this.Description
