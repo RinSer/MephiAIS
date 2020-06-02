@@ -10,7 +10,9 @@ open Microsoft.AspNetCore.Mvc
 open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Hosting
-open RPSAdminContext
+open Microsoft.AspNetCore.Mvc.NewtonsoftJson
+open MongoDB.Driver
+open RPSAdmin
 
 type Startup private () =
     new (configuration: IConfiguration) as this =
@@ -19,8 +21,14 @@ type Startup private () =
 
     // This method gets called by the runtime. Use this method to add services to the container.
     member this.ConfigureServices(services: IServiceCollection) =
+        // create MongoDB client
+        let mongo = MongoClient("mongodb://localhost:27017/")
+        // get rps database
+        let rps = mongo.GetDatabase("rps")
+        // add App as singleton with injected db collection
+        services.AddSingleton<App>(fun sp -> new App(rps.GetCollection<Project>("projects"))) |> ignore
         // Add framework services.
-        services.AddControllers() |> ignore
+        services.AddControllers().AddNewtonsoftJson() |> ignore
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     member this.Configure(app: IApplicationBuilder, env: IWebHostEnvironment) =
@@ -34,7 +42,5 @@ type Startup private () =
         app.UseEndpoints(fun endpoints ->
             endpoints.MapControllers() |> ignore
             ) |> ignore
-
-        Context.InitiateApp
 
     member val Configuration : IConfiguration = null with get, set

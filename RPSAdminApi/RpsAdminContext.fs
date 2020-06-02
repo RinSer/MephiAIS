@@ -12,19 +12,19 @@ module Context =
     let Categories = [| "Task"; "Issue"; "UserStory" |]
     let Statuses = [| "New"; "Pending"; "Over" |]
 
-    let InitiateApp =
+    let InitiateApp(app: App) =
         for i in 1..ProjectsCount do
             let faker = new Faker("ru")
-            App.addProject(new Project(i, faker.Company.CompanyName(), faker.Company.CatchPhrase()))
+            app.addProject(new Project(i, faker.Company.CompanyName(), faker.Company.CatchPhrase()))
 
-        for project in App.Projects do
+        for project in app.Projects do
             for i in 1..UsersCount do
                 let faker = new Faker("ru")
                 let user = faker.Person
                 project.addUser(new User(i, user.UserName, user.Phone, user.LastName, user.FirstName, 
                                         user.FirstName, UserRole))
         let mutable id = 0
-        for project in App.Projects do
+        for project in app.Projects do
             for user in project.Users do
                 for i in 1..(Categories.Length * Statuses.Length) do
                     let faker = new Faker("ru")
@@ -33,3 +33,4 @@ module Context =
                     project.addProjectItem(new ProjectItem(id, faker.Lorem.Sentence(), faker.Lorem.Paragraph(id),
                                                     DateTime.Now, DateTime.Now, status, category), [| user |])
                     id <- id + 1
+        app

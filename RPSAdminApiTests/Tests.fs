@@ -7,14 +7,10 @@ open RPSAdmin
 open RPSAdminContext
 open RPSAdminApi.Controllers
 
-module Fixtures = 
-    type RPSAdminFixture() =
-        do 
-            Context.InitiateApp
-
 module RPSAdminTests =
     
-    let Controller = RPSAdminApiController(null)
+    let App = Context.InitiateApp(new App(null))
+    let Controller = RPSAdminApiController(App, null)
     
     type RPSAdminTests() =
 
@@ -181,5 +177,3 @@ module RPSAdminTests =
             Assert.DoesNotContain(oldItem, project.ProjectItems)
             Assert.Contains(item, project.ProjectItems)
             Assert.All(project.Users, fun u -> Assert.Contains(item, u.ProjectItems))
-
-        interface IClassFixture<Fixtures.RPSAdminFixture>
