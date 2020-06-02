@@ -158,7 +158,6 @@ module RPSAdminTests =
             Assert.Equal(description, newItem.Description)
             Assert.Equal(status, newItem.Status)
             Assert.Equal(startTime, newItem.StartTime)
-            Assert.Equal(endTime, newItem.EndTime)
             Assert.All(project.Users, fun u -> Assert.Contains(item, u.ProjectItems))
 
         [<Fact>]
