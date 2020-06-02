@@ -6,6 +6,8 @@
 
   <ItemGroup>
     <Compile Include="RpsAdminContext.fs" />
+    <Compile Include="TaigaTypes.fs" />
+    <Compile Include="SyncWithTaiga.fs" />
     <Compile Include="Controllers\RpsAdminApiController.fs" />
     <Compile Include="Startup.fs" />
     <Compile Include="Program.fs" />
@@ -13,6 +15,9 @@
 
   <ItemGroup>
     <PackageReference Include="Bogus" Version="29.0.2" />
+    <PackageReference Include="Hangfire" Version="1.7.11" />
+    <PackageReference Include="Hangfire.Mongo" Version="0.6.7" />
+    <PackageReference Include="Http.fs" Version="5.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.4" />
   </ItemGroup>
 

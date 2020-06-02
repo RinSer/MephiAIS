@@ -4,7 +4,7 @@
 
     // === Task, UserStory or Issue ===
     type ProjectItem(id: int, title: string, description: string,
-        startTime: DateTime, endTime: DateTime, status: string, category: string) =
+        startTime: DateTime, endTime, status: string, category: string) =
         inherit Entity<ProjectItem>(id)
 
         let mutable _title = title
@@ -25,7 +25,7 @@
             and set(startTime: DateTime) = _startTime <- startTime
         member this.EndTime 
             with get() = _endTime
-            and set(endTime: DateTime) = _endTime <- endTime
+            and set(endTime) = _endTime <- endTime
         member this.Status 
             with get() = _status
             and set(status: string) = _status <- status
