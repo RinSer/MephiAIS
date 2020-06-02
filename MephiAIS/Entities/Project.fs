@@ -1,5 +1,6 @@
 ﻿namespace RPSAdmin
 
+    open System.Linq
     open MongoDB.Bson
     open MongoDB.Driver
 
@@ -13,7 +14,6 @@
         let mutable _description = description
 
         let mutable _users: User array = [||]
-        let mutable _projectItems: ProjectItem array = [||]
 
         member this.Title 
             with get() = _title
@@ -26,8 +26,7 @@
             with get() = _users
             and set(users: User array) = _users <- users
         member this.ProjectItems 
-            with get() = _projectItems
-            and set(projectItems: ProjectItem array) = _projectItems <- projectItems
+            with get() = Array.collect (fun(u: User) -> u.ProjectItems) _users
 
         member this.setDbCollection(dbCollection: IMongoCollection<Project>) =
             _dbCollection <- dbCollection
@@ -52,21 +51,18 @@
             _users.[idx] <- user
             this.tryUpdateInDb()
 
+        member this.hasUser(user: User) = Array.exists (fun(u: User) -> u.Id = user.Id) _users
+
         member this.addProjectItem(item: ProjectItem, users: User array) = 
             for user in users do
-                if not <| Array.contains user this.Users then
-                    this.addUser(user)
-                user.ProjectItems <- Array.append user.ProjectItems [| item |]
-            _projectItems <- Array.append _projectItems [| item |]
+                if not <| this.hasUser user then this.addUser(user)
+                _users.First(fun u -> u.Id = user.Id).addProjectItem item
             this.tryUpdateInDb()
 
         member this.updateProjectItem(item: ProjectItem, users: User array) = 
-            let idx = Array.findIndex (fun(pi: ProjectItem) -> pi.Id = item.Id) _projectItems
             for user in this.Users do
                 user.ProjectItems <- Array.filter (fun pi -> pi.Id <> item.Id) user.ProjectItems
             for user in users do
-                if not <| Array.contains user this.Users then
-                    this.addUser(user)
-                user.ProjectItems <- Array.append user.ProjectItems [| item |]
-            _projectItems.[idx] <- item
+                if not <| this.hasUser user then this.addUser(user)
+                _users.First(fun u -> u.Id = user.Id).addProjectItem item
             this.tryUpdateInDb()

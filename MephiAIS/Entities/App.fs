@@ -24,7 +24,6 @@
         member this.updateProject(project: Project) =
             let idx = Array.findIndex (fun(p: Project) -> p.Id = project.Id) _projects
             project.Users <- _projects.[idx].Users
-            project.ProjectItems <- _projects.[idx].ProjectItems
             _projects.[idx] <- project
             if _dbCollection <> null then
                 _projects.[idx].setDbCollection(_dbCollection)

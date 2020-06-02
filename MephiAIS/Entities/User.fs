@@ -35,3 +35,6 @@
         member this.ProjectItems 
             with get() = _projectItems
             and set(items: ProjectItem array) = _projectItems <- items
+
+        member this.addProjectItem(item: ProjectItem) =
+            _projectItems <- Array.append _projectItems [| item |]
